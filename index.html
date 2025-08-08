@@ -1,0 +1,32 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia de Posições de Jiu Jitsu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <button class="back-button">← Voltar para Nível</button>
+        <h1>Guia de Posições de Jiu Jitsu</h1>
+        <p>Selecione seu nível para visualizar as técnicas apropriadas</p>
+        <button class="admin-button" onclick="location.href='admin.html'">Admin</button>
+    </header>
+    
+    <div class="controls">
+        <button class="level-btn active" data-level="beginner">Iniciante</button>
+        <button class="level-btn" data-level="intermediate">Intermediário</button>
+        <button class="level-btn" data-level="advanced">Avançado</button>
+    </div>
+    
+    <div id="content-container">
+        <!-- Level content will be loaded here dynamically -->
+    </div>
+
+    <div id="position-detail-container" class="position-detail-container">
+        <!-- Position detail will be loaded here -->
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
