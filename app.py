@@ -17,6 +17,8 @@ with app.app_context():
 #Rotas
 app.add_url_rule('/', 'index', UserController.index)
 app.add_url_rule('/contact', 'contact', UserController.contact, methods=['GET', 'POST'])
+app.add_url_rule('/delete/<int:user_id>', 'delete_user', UserController.delete_user, methods=['POST'])
+app.add_url_rule('/update/<int:user_id>', 'update_user', UserController.update_user, methods=['POST'])
 
 
 if __name__ == '__main__':

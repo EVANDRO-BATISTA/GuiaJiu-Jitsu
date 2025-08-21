@@ -23,12 +23,24 @@
                 <tbody>
                     {% for user in users %}
                     <tr>                    
-                    <th scope="row">{{user.id}}</th>
-                    <td>{{user.name}}</td>
-                    <td>{{user.email}}}</td>                    
+                    <th scope="row">{{user.id}}</th>                                 
                     <td>
-                        <button type="submit">Editar</button>
-                        <button type="submit">Excluir</button>
+                        <form action="/update/{{ user.id }}" method="POST" style="display: inline;">
+                            <input type="text" name="name" value="{{ user.name }}">
+                        </form>
+                    </td>
+                    <td>
+                        <form action="/update/{{ user.id }}" method="POST" style="display: inline;">                            
+                            <input type="text" name="email" value="{{ user.email }}">
+                        </form>
+                    </td>                                        
+                    <td>
+                        <form action="/update/{{ user.id }}" method="POST" style="display: inline;"> 
+                            <button type="submit">Atualizar</button>
+                        </form>
+                        <form action="/delete/{{ user.id }}" method="POST" style="display: inline;" >                            
+                            <button type="submit">Excluir</button>
+                        </form>                        
                     </td>
                     </tr>
                     {% endfor %}                
