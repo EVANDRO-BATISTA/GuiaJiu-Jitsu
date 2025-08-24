@@ -41,7 +41,7 @@ h1 {
     flex-wrap: wrap;
 }
 
-.level-btn, .admin-button, .add-position-btn, .action-btn, .save-btn, .cancel-btn {
+.level-btn, .admin-button, .botao-link-admin, .add-position-btn, .action-btn, .save-btn, .cancel-btn {
     background: var(--secondary);
     color: white;
     border: none;
@@ -56,7 +56,7 @@ h1 {
 }
 
 .level-btn:hover, .level-btn.active, 
-.admin-button:hover, .admin-button.active,
+.admin-button:hover, .admin-button.active, .botao-link-admin,
 .add-position-btn:hover, .add-position-btn.active,
 .action-btn:hover, .action-btn.active,
 .save-btn:hover, .save-btn.active,
@@ -174,7 +174,7 @@ h1 {
     display: none;
 }
 
-.admin-button {
+.admin-button, .botao-link-admin {
     position: absolute;
     right: 20px;
     top: 30px;
@@ -240,7 +240,7 @@ h1 {
         width: 100%;
     }
 
-    .back-button, .admin-button {
+    .back-button, .admin-button, .botao-link-admin {
         position: static;
         margin-bottom: 20px;
     }
@@ -286,13 +286,13 @@ h1 {
     color: var(--light);
 }
 
-.admin-position-actions {
+.admin-position-actions, .botao-link {
     display: flex;
     gap: 10px;
     margin-top: 10px; /* For mobile layout */
 }
 
-.admin-position-actions button {
+.admin-position-actions button, .botao-link {
     padding: 8px 15px;
     font-size: 0.9rem;
     border-radius: 20px;
@@ -407,7 +407,7 @@ h1 {
     background: #c0392b;
 }
 
-.form-actions {
+.form-actions, .botao-link {
     display: flex;
     justify-content: flex-end;
     gap: 15px;
@@ -436,16 +436,16 @@ h1 {
         flex-direction: column;
         align-items: flex-start;
     }
-    .admin-position-actions {
+    .admin-position-actions,.botao-link {
         width: 100%;
         justify-content: flex-end;
     }
 }
 
-.botao-link {
+.botao-link, .botao-link-admin{
   display: inline-block; /* Permite definir largura, altura e preenchimento */
   padding: 10px 20px; /* Espaçamento interno */
-  background-color: #4CAF50; /* Cor de fundo */
+  background-color: var(--secondary); /* Cor de fundo */
   color: white; /* Cor do texto */
   text-align: center; /* Alinha o texto no centro */
   text-decoration: none; /* Remove o sublinhado do link */
@@ -453,9 +453,14 @@ h1 {
   border-radius: 5px; /* Borda arredondada */
   cursor: pointer; /* Muda o cursor para ponteiro ao passar por cima */
   font-size: 16px; /* Tamanho da fonte */
+  font-weight: bold;
+  box-shadow:0 4px 6px rgba(0,0,0,0.2);
   margin: 10px 0; /* Margem para separar de outros elementos */
 }
 
-.botao-link:hover {
-  background-color: #45a049; /* Cor de fundo mais escura ao passar o mouse */
+.botao-link:hover, .botao-link-admin:hover {
+  /* background-color: #45a049; Cor de fundo mais escura ao passar o mouse */
+  background: #c0392b;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 8px rgba(0,0,0,0.3);
 }

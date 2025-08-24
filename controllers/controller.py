@@ -5,10 +5,29 @@ from models.guia import db, Position, Variation, Step
 
 # Rota para ler (Read) todos os livros
 def guia_bjj():
-    return render_template('index.html')
+    positions = Position.query.filter_by(level='beginner').all()
+    return render_template('index.html', positions=positions)
+
+def indexinter():
+    positions = Position.query.filter_by(level='intermediate').all()
+    return render_template('index_inter.html', positions=positions)
+
+def indexavanc():
+    positions = Position.query.filter_by(level='advanced').all()
+    return render_template('index_avanc.html', positions=positions)
 
 def admin_bjj():
-    return render_template('admin.html')
+    positions = Position.query.filter_by(level='beginner').all()
+    return render_template('adm/admin.html', positions=positions)
+
+def interadm():
+    positions = Position.query.filter_by(level='intermediate').all()
+    return render_template('adm/inter_adm.html',positions=positions)
+
+def avancadm():
+    positions = Position.query.filter_by(level='advanced').all()
+    return render_template('adm/avanc_adm.html',positions=positions)
+
 
 # def list_positions_by_level(level):
 #     positions = Position.query.filter_by(level=level).all()

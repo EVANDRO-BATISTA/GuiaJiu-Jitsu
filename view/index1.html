@@ -4,7 +4,7 @@
     <a href="{{ url_for('form_book_route') }}">Adicionar Novo Livro</a>
     <hr>
     <ul>
-        {% for book in books %}
+        {% for position in positions %}
         <li>
             {{ book.title }} - {{ book.author }}
             <a href="{{ url_for('form_book_route', book_id=book.id) }}">Editar</a>

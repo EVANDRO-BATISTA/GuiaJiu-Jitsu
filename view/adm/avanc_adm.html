@@ -1,0 +1,41 @@
+{% extends 'templates/base.html' %}
+
+{% block conteudo %}
+    <header>
+        <a href="{{ url_for('guiabjj_route') }}" class="botao-link-admin">← Voltar para o Guia</a> 
+        <!-- <button class="back-button" onclick="location.href='index.html'" style="display: block;">← Voltar para o Guia</button> -->
+        <h1>Administração de Posições</h1>
+        <p>Gerencie as posições, variações e passos</p>
+    </header>
+
+    <div class="controls admin-controls">
+        <a href="{{ url_for('admin_route') }}" class="botao-link">Iniciante</a> 
+        <a href="{{ url_for('interadm_route') }}" class="botao-link">Intermediário</a> 
+        <a href="{{ url_for('avancadm_route') }}" class="botao-link-select">Avançado</a> 
+        <a href="{{ url_for('guiabjj_route') }}" class="botao-link">Adicionar Nova Posição</a> 
+        <!-- <button class="level-btn active" data-level="beginner">Iniciante</button>
+        <button class="level-btn" data-level="intermediate">Intermediário</button>
+        <button class="level-btn" data-level="advanced">Avançado</button>
+        <button class="add-position-btn">Adicionar Nova Posição</button> -->
+    </div>
+
+    <div id="admin-content-container">
+        <h2 class="level-header">Gerenciar Posições para Avançado</h2>
+        <div class="admin-list"> 
+            
+            {% for position in positions %} 
+
+            <div class="admin-position-item">
+                <span>{{ position.name }}</span>
+                <div class="admin-position-actions">
+                    <button class="action-btn edit-btn" data-name="Guarda Fechada">Editar</button>
+                    <button class="action-btn delete-btn" data-name="Guarda Fechada">Excluir</button>
+                </div>
+            </div>
+            
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}
