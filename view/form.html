@@ -1,0 +1,17 @@
+{% extends 'templates/base.html' %}
+
+{% block conteudo %}
+
+    <h2>{{ 'Editar Livro' if book else 'Adicionar Livro' }}</h2>
+    <form method="POST">
+        <label for="title">Título:</label>
+        <input type="text" id="title" name="title" value="{{ book.title if book else '' }}" required><br><br>
+        
+        <label for="author">Autor:</label>
+        <input type="text" id="author" name="author" value="{{ book.author if book else '' }}" required><br><br>
+        
+        <button type="submit">{{ 'Salvar Alterações' if book else 'Adicionar' }}</button>
+    </form>
+    <a href="{{ url_for('list_books_route') }}">Cancelar</a>
+
+{% endblock %}

@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administração - Guia de Posições de Jiu Jitsu</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+{% extends 'templates/base.html' %}
+
+{% block conteudo %}
     <header>
+        <h1>
+            <a href="{{ url_for('guiabjj_route') }}" class="botao-link">← Voltar para o Guia</a>            
+        </h1>
         <button class="back-button" onclick="location.href='index.html'" style="display: block;">← Voltar para o Guia</button>
         <h1>Administração de Posições</h1>
         <p>Gerencie as posições, variações e passos</p>
@@ -24,7 +21,4 @@
         <!-- Position list or form will be loaded here dynamically -->
     </div>
 
-    <script src="admin.js"></script>
-</body>
-</html>
-
+{% endblock %}
