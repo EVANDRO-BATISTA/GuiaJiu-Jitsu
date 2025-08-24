@@ -3,7 +3,7 @@
 {% block conteudo %}
     <header>
         <div>
-            <a href="{{ url_for('guiabjj_route') }}" class="botao-link-admin">← Voltar para o Guia</a>
+            <a href="{{ url_for('guiabjj_route') }}" class="back-button" style="display: block;">← Voltar para o Guia</a>
         </div>
         <!-- <button class="back-button" onclick="location.href='index.html'" style="display: block;">← Voltar para o Guia</button> -->
         <h1>Administração de Posições</h1>
@@ -11,10 +11,10 @@
     </header>
 
     <div class="controls admin-controls">
-        <a href="{{ url_for('admin_route') }}" class="botao-link-select">Iniciante</a> 
-        <a href="{{ url_for('interadm_route') }}" class="botao-link">Intermediário</a> 
-        <a href="{{ url_for('avancadm_route') }}" class="botao-link">Avançado</a> 
-        <a href="{{ url_for('guiabjj_route') }}" class="botao-link">Adicionar Nova Posição</a> 
+        <a href="{{ url_for('admin_route') }}" class="level-btn active">Iniciante</a> 
+        <a href="{{ url_for('interadm_route') }}" class="level-btn">Intermediário</a> 
+        <a href="{{ url_for('avancadm_route') }}" class="level-btn">Avançado</a> 
+        <a href="{{ url_for('guiabjj_route') }}" class="add-position-btn">Adicionar Nova Posição</a> 
         <!-- <button class="level-btn active" data-level="beginner">Iniciante</button>
         <button class="level-btn" data-level="intermediate">Intermediário</button>
         <button class="level-btn" data-level="advanced">Avançado</button>

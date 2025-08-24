@@ -3,7 +3,7 @@
 {% block conteudo %}
     <header>
         <div>
-            <a href="{{ url_for('admin_route') }}" class="botao-link-admin">Admin</a> 
+            <a href="{{ url_for('admin_route') }}" class="admin-button">Admin</a> 
         </div>
         
         <!-- <button class="back-button">← Voltar para Nível</button> -->
@@ -13,9 +13,9 @@
     </header>
     
     <div class="controls">
-        <a href="{{ url_for('guiabjj_route') }}" class="botao-link-select">Iniciante</a> 
-        <a href="{{ url_for('indexinter_route') }}" class="botao-link">Intermediário</a> 
-        <a href="{{ url_for('indexavanc_route') }}" class="botao-link">Avançado</a> 
+        <a href="{{ url_for('guiabjj_route') }}" class="level-btn active">Iniciante</a> 
+        <a href="{{ url_for('indexinter_route') }}" class="level-btn">Intermediário</a> 
+        <a href="{{ url_for('indexavanc_route') }}" class="level-btn">Avançado</a> 
         <!-- <button class="level-btn active" data-level="beginner">Iniciante</button>
         <button class="level-btn" data-level="intermediate">Intermediário</button>
         <button class="level-btn" data-level="advanced">Avançado</button> -->
