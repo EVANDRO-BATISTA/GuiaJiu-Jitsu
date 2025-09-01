@@ -46,3 +46,30 @@
 
             stepsContainer.insertAdjacentHTML('beforeend', newStepHtml);
         }
+
+
+//Mensagem de Sucesso
+document.addEventListener('DOMContentLoaded', function() {
+    const popupContainer = document.getElementById('popup-container');
+    
+    // Verifique se há mensagens de flash para mostrar o pop-up
+    const hasMessages = document.querySelector('.message-container .alert-success');
+    if (hasMessages) {
+        popupContainer.style.display = 'flex';
+    }
+
+    // Fecha o pop-up ao clicar no botão de fechar
+    const closeBtn = document.querySelector('.popup-content .close-btn');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', function() {
+            popupContainer.style.display = 'none';
+        });
+    }
+
+    // Fecha o pop-up ao clicar fora do conteúdo dele
+    popupContainer.addEventListener('click', function(event) {
+        if (event.target === popupContainer) {
+            popupContainer.style.display = 'none';
+        }
+    });
+});

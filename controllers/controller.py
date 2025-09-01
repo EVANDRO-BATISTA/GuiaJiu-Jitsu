@@ -83,7 +83,7 @@ def add_position_beginner():
             # Se chegarmos aqui sem erro, significa que os dados foram salvos.
             # O erro está no redirecionamento ou na página de sucesso.
             print("Dados salvos com sucesso. Tentando redirecionar...") 
-            return redirect(url_for('success_page'))
+            return redirect(url_for('add_position_beginner'))
 
         except Exception as e:
             # Este bloco só será executado se algo falhar ANTES do commit
