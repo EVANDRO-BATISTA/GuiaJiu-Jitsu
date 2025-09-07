@@ -20,7 +20,7 @@
                     <label for="step_desc_${variationCount}_1">Descrição do Passo:</label><br>
                     <textarea id="step_desc_${variationCount}_1" name="step_desc_${variationCount}[]" rows="4" cols="50" required></textarea><br><br>
                 </div>
-                <button type="button" onclick="addStep(${variationCount})">Adicionar Outro Passo</button>
+                <button class="add-variation-btn" type="button" onclick="addStep(${variationCount})">Adicionar Outro Passo</button>
             `;
             
             variationsContainer.insertAdjacentHTML('beforeend', newVariationHtml);
