@@ -29,7 +29,7 @@ def avancadm():
     positions = Position.query.filter_by(level='advanced').all()
     return render_template('adm/avanc_adm.html',positions=positions)
 
-# Rotas de Criação
+# Rotas de Criação de novas posições
 def add_position_beginner():
     if request.method == 'POST':
         try:
@@ -114,8 +114,79 @@ def delete_position_beginner(position_id):
         # Armazena uma mensagem de erro na sessão
         flash('Erro ao excluir a posição. Por favor, tente novamente.', 'danger')
         
-        return redirect(url_for('sua_rota_de_listagem'))
+        return redirect(url_for('admin_route'))
 
+# Atualizar
+def edit_position_beginner(position_id):
+    position = Position.query.filter_by(id=position_id, level='beginner').first_or_404()
+
+    if request.method == 'POST':
+        try:
+            position.name = request.form['position_name']
+            position.description = request.form['position_description']
+            position.image = request.form.get('position_image')
+
+            # --- Lógica de atualização de Variações e Passos ---
+
+            # 1. Coletar os IDs das variações e passos que NÃO devem ser deletados
+            # Isso requer que você adicione um campo oculto no HTML para os IDs existentes.
+            # Por simplicidade, vou manter a abordagem de deletar e recriar,
+            # que é mais fácil de gerenciar com o formulário dinâmico.
+
+            # Deletar todas as variações e passos existentes para esta posição
+            # antes de adicionar as novas do formulário.
+            # É importante fazer isso em uma ordem que respeite as chaves estrangeiras.
+            for variation in position.variations:
+                # Deletar passos primeiro
+                for step in variation.steps:
+                    db.session.delete(step)
+                # Depois deletar a variação
+                db.session.delete(variation)
+            db.session.flush() # Para garantir que as exclusões sejam processadas antes de adicionar novas
+
+            # 2. Adicionar as novas variações e passos com base nos dados do formulário
+            variation_names = request.form.getlist('variation_name[]')
+            variation_descs = request.form.getlist('variation_desc[]')
+            
+            num_variations = len(variation_names) # Use o comprimento real das listas
+
+            for i in range(num_variations):
+                new_variation = Variation(
+                    name=variation_names[i],
+                    description=variation_descs[i],
+                    position=position
+                )
+                db.session.add(new_variation)
+                db.session.flush() # Flushes para que new_variation tenha um ID antes de criar Steps
+
+                # Note que os nomes dos campos de passo agora são 'step_img_X[]' e 'step_desc_X[]'
+                # onde X é o índice da variação + 1
+                step_imgs = request.form.getlist(f'step_img_{i+1}[]')
+                step_descs = request.form.getlist(f'step_desc_{i+1}[]')
+                
+                num_steps = len(step_imgs)
+
+                for j in range(num_steps):
+                    new_step = Step(
+                        img=step_imgs[j] if step_imgs[j] else None,
+                        description=step_descs[j],
+                        variation=new_variation
+                    )
+                    db.session.add(new_step)
+
+            db.session.commit()
+            flash('Posição atualizada com sucesso!', 'success')
+            return redirect(url_for('edit_position_beginner', position_id=position_id))
+
+        except Exception as e:
+            db.session.rollback()
+            flash(f'Erro ao atualizar a posição: {e}', 'danger')
+            # Renderiza novamente o formulário com os dados que o usuário tentou enviar,
+            # ou redireciona para a rota GET da edição para recarregar os dados do banco
+            return redirect(url_for('edit_position_beginner', position_id=position_id))
+
+    # Método GET: Renderiza o formulário pré-preenchido
+    return render_template('adm/posicoes/posicao_iniciante_update.html', position=position)
 
 # def list_positions_by_level(level):
 #     positions = Position.query.filter_by(level=level).all()

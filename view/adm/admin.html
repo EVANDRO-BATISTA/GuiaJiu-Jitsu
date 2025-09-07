@@ -1,5 +1,5 @@
 {% extends 'templates/base.html' %}
-
+<!-- Janela de adicionado com sucesso -->
     {% block conteudo %}
     <div id="popup-container" class="popup-container">
         <div class="popup-content">
@@ -18,7 +18,8 @@
             {% endif %}
             {% endwith %}
         </div>
-    </div>
+    </div>    
+<!--  -->
 
     <header>
         <div>
@@ -50,7 +51,7 @@
                 <span>{{ position.name }}</span>
                 <span id="meuSpanOculto" hidden>{{ position.id }}</span>
                 <div class="admin-position-actions">
-                    <button class="action-btn edit-btn" data-name="Guarda Fechada">Editar</button>
+                    <a class="action-btn edit-btn" href="{{ url_for('edit_position_beginner', position_id=position.id) }}" >Editar</a>
                      <form action="{{ url_for('delete_position_beginner', position_id=position.id) }}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta posição?');" >
                         <button class="action-btn delete-btn" type="submit" >Excluir</button>
                     </form>

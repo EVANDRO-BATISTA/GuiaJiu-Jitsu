@@ -299,11 +299,14 @@ h1 {
     box-shadow: none;
 }
 
-.admin-position-actions button.edit-btn {
+.admin-position-actions button.edit-btn, a.edit-btn {
     background: #3498db; /* Blue for edit */
+    padding: 6px 15px;
+    font-size: 1rem;
+
 }
 
-.admin-position-actions button.edit-btn:hover {
+.admin-position-actions button.edit-btn:hover, a.edit-btn:hover {
     background: #2980b9;
 }
 
