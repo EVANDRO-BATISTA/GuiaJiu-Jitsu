@@ -2,7 +2,10 @@
 from flask import Flask
 from config import Config
 from models.guia import db # Importe os novos modelos
-from controllers.controller import guia_bjj, admin_bjj, add_position_beginner, edit_position_beginner, delete_position_beginner, interadm, avancadm, indexinter, indexavanc
+from controllers.controller import guia_bjj, admin_bjj, interadm, avancadm, indexinter, indexavanc
+from controllers.controllerIni import add_position_beginner, edit_position_beginner, delete_position_beginner
+from controllers.controllerInter import add_position_intermediate, edit_position_intermediate, delete_position_intermediate
+from controllers.controllerAvan import add_position_advanced, edit_position_advanced, delete_position_advanced
 
 app = Flask(__name__, template_folder='view')
 app.config.from_object(Config)
@@ -19,13 +22,25 @@ app.add_url_rule('/', 'guiabjj_route', guia_bjj, methods=['GET', 'POST'])
 app.add_url_rule('/indexInter', 'indexinter_route', indexinter, methods=['GET', 'POST'])
 app.add_url_rule('/indexAvanc', 'indexavanc_route', indexavanc, methods=['GET', 'POST'])
 
+# rotas iniciante
 app.add_url_rule('/admin', 'admin_route', admin_bjj, methods=['GET', 'POST'])
 app.add_url_rule('/addPositionBeginner', 'add_position_beginner', add_position_beginner, methods=['GET', 'POST'])
 app.add_url_rule('/delete_position_beginner/<int:position_id>', 'delete_position_beginner', delete_position_beginner, methods=['POST'])
 app.add_url_rule('/editPositionBeginner/<int:position_id>', 'edit_position_beginner', edit_position_beginner, methods=['GET', 'POST'])
 
+# rotas intermediario
 app.add_url_rule('/interAdm', 'interadm_route', interadm, methods=['GET', 'POST'])
+app.add_url_rule('/addPositionintermediate', 'add_position_intermediate', add_position_intermediate, methods=['GET', 'POST'])
+app.add_url_rule('/delete_position_intermediate/<int:position_id>', 'delete_position_intermediate', delete_position_intermediate, methods=['POST'])
+app.add_url_rule('/editPositionintermediate/<int:position_id>', 'edit_position_intermediate', edit_position_intermediate, methods=['GET', 'POST'])
+
+# rotas avançado
 app.add_url_rule('/avancAdm', 'avancadm_route', avancadm, methods=['GET', 'POST'])
+app.add_url_rule('/addPositionadvanced', 'add_position_advanced', add_position_advanced, methods=['GET', 'POST'])
+app.add_url_rule('/delete_position_advanced/<int:position_id>', 'delete_position_advanced', delete_position_advanced, methods=['POST'])
+app.add_url_rule('/editPositionadvanced/<int:position_id>', 'edit_position_advanced', edit_position_advanced, methods=['GET', 'POST'])
+
+
 # app.add_url_rule('/add', 'form_book_route', form_book, methods=['GET', 'POST'])
 # app.add_url_rule('/edit/<int:book_id>', 'form_book_route', form_book, methods=['GET', 'POST'])
 # app.add_url_rule('/delete/<int:book_id>', 'delete_book_route', delete_book)
