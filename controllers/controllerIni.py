@@ -93,9 +93,26 @@ def delete_position_beginner(position_id):
     try:
         position = Position.query.filter_by(id=position_id, level='beginner').first_or_404()
         
+        # 1. Obter o caminho da imagem antes de deletar o registro do banco de dados
+        # A posição.image já armazena o caminho relativo (ex: 'uploads/posicoes/imagem.jpg')
+        image_path = position.image
+
+        # 2. Deletar o registro do banco de dados
         db.session.delete(position)
         db.session.commit()
         
+        # 3. Se a posição tinha uma imagem, tentar deletá-la do sistema de arquivos
+        if image_path:
+            # Constrói o caminho completo para o arquivo
+            full_image_path = os.path.join('static/imagens', image_path)
+            
+            # 4. Verifica se o arquivo existe e o deleta
+            if os.path.exists(full_image_path):
+                os.remove(full_image_path)
+                print(f"Imagem deletada: {full_image_path}")
+            else:
+                print(f"Atenção: A imagem não foi encontrada no caminho: {full_image_path}")
+
         # Armazena uma mensagem de sucesso na sessão
         flash(f'Posição "{position.name}" excluída com sucesso!', 'success')
         
@@ -104,7 +121,7 @@ def delete_position_beginner(position_id):
 
     except Exception as e:
         db.session.rollback()
-        print(f"Erro ao excluir a posição: {e}")
+        print(f"Erro ao excluir a posição ou a imagem: {e}")
         # Armazena uma mensagem de erro na sessão
         flash('Erro ao excluir a posição. Por favor, tente novamente.', 'danger')
         

@@ -1,8 +1,13 @@
 # controllers/book_controller.py
 
-from flask import render_template, request, jsonify, redirect, url_for, flash
+from flask import render_template, request, redirect, url_for, flash
+from werkzeug.utils import secure_filename
+import os
 from models.guia import db, Position, Variation, Step
-from flask import flash, get_flashed_messages # Adicione este import
+
+# Define o diretório onde as imagens serão salvas.
+# Recomenda-se criar essa pasta na raiz do seu projeto.
+UPLOAD_FOLDER = 'static/imagens' # Exemplo: static/uploads/posicoes
 
 # Rotas de Criação de novas posições
 def add_position_advanced():
@@ -11,24 +16,43 @@ def add_position_advanced():
             # 1. Obter dados da Posição
             position_name = request.form['position_name']
             position_desc = request.form['position_description']
-            position_img = request.form.get('position_image')
             position_level = 'advanced'
 
-            # Cria e adiciona a nova Posição
+            # 2. Processar o upload da imagem
+            if 'imagem_upload' in request.files:
+                file = request.files['imagem_upload']
+                if file.filename != '':
+                    # Garante um nome de arquivo seguro
+                    filename = secure_filename(file.filename)
+                    
+                    # Constrói o caminho completo para salvar a imagem
+                    upload_path = os.path.join(UPLOAD_FOLDER, filename)
+                    
+                    # Salva o arquivo no diretório
+                    file.save(upload_path)
+                    
+                    # Armazena apenas o caminho relativo ou nome do arquivo no banco de dados
+                    position_image = os.path.join(filename)
+                else:
+                    position_image = None
+            else:
+                position_image = None
+
+            # 3. Cria e adiciona a nova Posição no banco de dados
             new_position = Position(
                 name=position_name,
                 description=position_desc,
-                image=position_img,
+                image=position_image, # Use o caminho salvo
                 level=position_level
             )
             db.session.add(new_position)
             db.session.flush()
 
-            # 2. Obter dados das Variações e Passos
+            # 4. Obter dados das Variações e Passos (o restante do seu código)
             variation_names = request.form.getlist('variation_name[]')
             variation_descs = request.form.getlist('variation_desc[]')
             
-            num_variations = min(len(variation_names), len(variation_descs))
+            num_variations = len(variation_names)
 
             for i in range(num_variations):
                 new_variation = Variation(
@@ -42,7 +66,7 @@ def add_position_advanced():
                 step_imgs = request.form.getlist(f'step_img_{i+1}[]')
                 step_descs = request.form.getlist(f'step_desc_{i+1}[]')
                 
-                num_steps = min(len(step_imgs), len(step_descs))
+                num_steps = len(step_imgs)
                 
                 for j in range(num_steps):
                     new_step = Step(
@@ -52,20 +76,15 @@ def add_position_advanced():
                     )
                     db.session.add(new_step)
 
-            # 3. Commit no banco de dados
             db.session.commit()
-            
-            # Se chegarmos aqui sem erro, significa que os dados foram salvos.
-            # O erro está no redirecionamento ou na página de sucesso.
-            print("Dados salvos com sucesso. Tentando redirecionar...") 
-            return redirect(url_for('add_position_advanced'))
+            flash("Posição adicionada com sucesso!", 'success')
+            return redirect(url_for('avancadm_route'))
 
         except Exception as e:
-            # Este bloco só será executado se algo falhar ANTES do commit
-            # ou durante o redirecionamento (caso o redirect() falhe).
             db.session.rollback()
             print(f"Erro ao salvar a posição: {e}")
-            return f"Erro ao salvar a posição: {e}. Por favor, tente novamente."
+            flash(f"Erro ao salvar a posição: {e}. Por favor, tente novamente.", 'danger')
+            return redirect(url_for('add_position_advanced'))
 
     return render_template('adm/posicoes/posicao_avanc.html')
 
@@ -74,9 +93,26 @@ def delete_position_advanced(position_id):
     try:
         position = Position.query.filter_by(id=position_id, level='advanced').first_or_404()
         
+        # 1. Obter o caminho da imagem antes de deletar o registro do banco de dados
+        # A posição.image já armazena o caminho relativo (ex: 'uploads/posicoes/imagem.jpg')
+        image_path = position.image
+
+        # 2. Deletar o registro do banco de dados
         db.session.delete(position)
         db.session.commit()
         
+        # 3. Se a posição tinha uma imagem, tentar deletá-la do sistema de arquivos
+        if image_path:
+            # Constrói o caminho completo para o arquivo
+            full_image_path = os.path.join('static/imagens', image_path)
+            
+            # 4. Verifica se o arquivo existe e o deleta
+            if os.path.exists(full_image_path):
+                os.remove(full_image_path)
+                print(f"Imagem deletada: {full_image_path}")
+            else:
+                print(f"Atenção: A imagem não foi encontrada no caminho: {full_image_path}")
+
         # Armazena uma mensagem de sucesso na sessão
         flash(f'Posição "{position.name}" excluída com sucesso!', 'success')
         
@@ -85,12 +121,12 @@ def delete_position_advanced(position_id):
 
     except Exception as e:
         db.session.rollback()
-        print(f"Erro ao excluir a posição: {e}")
+        print(f"Erro ao excluir a posição ou a imagem: {e}")
         # Armazena uma mensagem de erro na sessão
         flash('Erro ao excluir a posição. Por favor, tente novamente.', 'danger')
         
         return redirect(url_for('avancadm_route'))
-
+    
 # Atualizar
 def edit_position_advanced(position_id):
     position = Position.query.filter_by(id=position_id, level='advanced').first_or_404()
@@ -100,6 +136,22 @@ def edit_position_advanced(position_id):
             position.name = request.form['position_name']
             position.description = request.form['position_description']
             position.image = request.form.get('position_image')
+
+            # --- Lógica de upload de imagem ---
+            if 'imagem_upload' in request.files:
+                file = request.files['imagem_upload']
+                if file.filename != '':
+                    # Deletar a imagem antiga, se existir
+                    if position.image and os.path.exists(os.path.join('static', position.image)):
+                        os.remove(os.path.join('static', position.image))
+
+                    # Salvar a nova imagem
+                    filename = secure_filename(file.filename)
+                    upload_path = os.path.join(UPLOAD_FOLDER, filename)
+                    file.save(upload_path)
+                    
+                    # Atualizar o caminho da imagem no banco de dados
+                    position.image = os.path.join(filename)
 
             # --- Lógica de atualização de Variações e Passos ---
 
@@ -112,10 +164,8 @@ def edit_position_advanced(position_id):
             # antes de adicionar as novas do formulário.
             # É importante fazer isso em uma ordem que respeite as chaves estrangeiras.
             for variation in position.variations:
-                # Deletar passos primeiro
                 for step in variation.steps:
                     db.session.delete(step)
-                # Depois deletar a variação
                 db.session.delete(variation)
             db.session.flush() # Para garantir que as exclusões sejam processadas antes de adicionar novas
 
@@ -123,7 +173,7 @@ def edit_position_advanced(position_id):
             variation_names = request.form.getlist('variation_name[]')
             variation_descs = request.form.getlist('variation_desc[]')
             
-            num_variations = len(variation_names) # Use o comprimento real das listas
+            num_variations = len(variation_names)
 
             for i in range(num_variations):
                 new_variation = Variation(
@@ -132,10 +182,8 @@ def edit_position_advanced(position_id):
                     position=position
                 )
                 db.session.add(new_variation)
-                db.session.flush() # Flushes para que new_variation tenha um ID antes de criar Steps
+                db.session.flush()
 
-                # Note que os nomes dos campos de passo agora são 'step_img_X[]' e 'step_desc_X[]'
-                # onde X é o índice da variação + 1
                 step_imgs = request.form.getlist(f'step_img_{i+1}[]')
                 step_descs = request.form.getlist(f'step_desc_{i+1}[]')
                 
@@ -156,8 +204,6 @@ def edit_position_advanced(position_id):
         except Exception as e:
             db.session.rollback()
             flash(f'Erro ao atualizar a posição: {e}', 'danger')
-            # Renderiza novamente o formulário com os dados que o usuário tentou enviar,
-            # ou redireciona para a rota GET da edição para recarregar os dados do banco
             return redirect(url_for('edit_position_advanced', position_id=position_id))
 
     # Método GET: Renderiza o formulário pré-preenchido

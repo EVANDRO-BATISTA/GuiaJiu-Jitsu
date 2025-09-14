@@ -22,7 +22,7 @@
 
     <header>
         <div>
-            <a href="{{ url_for('guiabjj_route') }}" class="back-button" style="display: block;">← Voltar para o Guia</a>
+            <a href="{{ url_for('guiabjj_route') }}" class="back-button" style="display: block; text-decoration: none;">← Voltar para o Guia</a>
         </div>
         <!-- <button class="back-button" onclick="location.href='index.html'" style="display: block;">← Voltar para o Guia</button> -->
         <h1>Administração de Posições</h1>
@@ -41,7 +41,7 @@
                 <div class="container">
                     <h1>Editar Posição: {{ position.name }}</h1>
 
-                    <form method="POST" action="{{ url_for('edit_position_intermediate', position_id=position.id) }}">
+                    <form method="POST" action="{{ url_for('edit_position_intermediate', position_id=position.id) }}" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="position_name">Nome da Posição:</label>
                             <input type="text" class="form-control" id="position_name" name="position_name" value="{{ position.name }}" required>
@@ -51,10 +51,13 @@
                             <textarea class="form-control" id="position_description" name="position_description" rows="3" required>{{ position.description }}</textarea>
                         </div>
                         <div class="form-group">
-                            <label for="position_image">URL da Imagem da Posição (Opcional):</label>
-                            <input type="text" class="form-control" id="position_image" name="position_image" value="{{ position.image or '' }}">
+                            <label for="imagem_upload">Carregar Nova Imagem da Posição (Opcional):</label>
+                            <input type="file" class="form-control-file" id="imagem_upload" name="imagem_upload" accept="image/*">
                             {% if position.image %}
-                                <img src="{{ position.image }}" alt="{{ position.name }}" style="max-width: 200px; margin-top: 10px;">
+                                <p>Imagem atual: {{ position.image }}</p>
+                                <img class="detail-main-image" src="{{ url_for('static', filename='imagens/'+ position.image) }}">
+                            {% else %}
+                                <p>Nenhuma imagem carregada.</p>
                             {% endif %}
                         </div>
 
