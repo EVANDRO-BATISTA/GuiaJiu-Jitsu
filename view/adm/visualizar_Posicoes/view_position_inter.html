@@ -1,0 +1,60 @@
+{% extends 'templates/base.html' %}
+
+{% block conteudo %}
+    <header>
+        <div>
+            <a href="{{ url_for('admin_route') }}" class="admin-button">Admin</a> 
+        </div>
+        
+        <!-- <button class="back-button">← Voltar para Nível</button> -->
+        <h1>Guia de Posições de Jiu Jitsu</h1>
+        <p>Selecione seu nível para visualizar as técnicas apropriadas</p>
+        <!-- <button class="admin-button" onclick="location.href='admin.html'">Admin</button>         -->
+    </header>
+    
+    <div class="controls">
+        <a href="{{ url_for('guiabjj_route') }}" class="level-btn active">Iniciante</a> 
+        <a href="{{ url_for('indexinter_route') }}" class="level-btn">Intermediário</a> 
+        <a href="{{ url_for('indexavanc_route') }}" class="level-btn">Avançado</a> 
+        <!-- <button class="level-btn active" data-level="beginner">Iniciante</button>
+        <button class="level-btn" data-level="intermediate">Intermediário</button>
+        <button class="level-btn" data-level="advanced">Avançado</button> -->
+    </div>
+
+    <div id="content-container" style="display: block;">
+        <div id="position-detail-container" class="position-detail-container" style="display: block;">
+            
+            <div class="position-header">                
+                <img class="detail-main-image" src="{{ url_for('static', filename='imagens/'+ position.image) }}">                
+                <div class="position-info">
+                    <h2>{{ position.name }}</h2>
+                    <p>{{ position.description }}</p>
+                </div>
+            </div>
+
+            <div class="variations-container">
+                {% for variation in position.variations %}
+                    <div class="variation-card">
+                        <h3>{{ variation.name }}</h3>
+                        <p>{{ variation.description }}</p>
+                        
+                        <div class="steps-container">
+                            {% for step in variation.steps %}
+                                <div class="step-card">
+                                    <div class="step-number">{{ loop.index }}</div>                                    
+                                    <img class="step-image" src="{{ url_for('static', filename='imagens/' + step.img) }}" alt="Passo {{ loop.index }}">
+                                    <div class="step-description">{{ step.description }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div id="position-detail-container" class="position-detail-container">
+        <!-- Position detail will be loaded here -->
+    </div>
+
+{% endblock %}

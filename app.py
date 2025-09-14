@@ -2,13 +2,24 @@
 from flask import Flask
 from config import Config
 from models.guia import db # Importe os novos modelos
-from controllers.controller import guia_bjj, admin_bjj, interadm, avancadm, indexinter, indexavanc
+from controllers.controller import guia_bjj, view_ini, view_inter, view_avanc, admin_bjj, interadm, avancadm, indexinter, indexavanc
 from controllers.controllerIni import add_position_beginner, edit_position_beginner, delete_position_beginner
 from controllers.controllerInter import add_position_intermediate, edit_position_intermediate, delete_position_intermediate
 from controllers.controllerAvan import add_position_advanced, edit_position_advanced, delete_position_advanced
+import os
+
+# Adicione a configuração do upload folder
+UPLOAD_FOLDER = 'static/uploads/posicoes'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = Flask(__name__, template_folder='view')
 app.config.from_object(Config)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Opcional: Função para verificar extensões permitidas
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 # Inicializa o SQLAlchemy com o app
 db.init_app(app)
@@ -27,28 +38,22 @@ app.add_url_rule('/admin', 'admin_route', admin_bjj, methods=['GET', 'POST'])
 app.add_url_rule('/addPositionBeginner', 'add_position_beginner', add_position_beginner, methods=['GET', 'POST'])
 app.add_url_rule('/delete_position_beginner/<int:position_id>', 'delete_position_beginner', delete_position_beginner, methods=['POST'])
 app.add_url_rule('/editPositionBeginner/<int:position_id>', 'edit_position_beginner', edit_position_beginner, methods=['GET', 'POST'])
+app.add_url_rule('/viewPositionIni/<int:position_id>', 'view_ini', view_ini, methods=['GET', 'POST'])
 
 # rotas intermediario
 app.add_url_rule('/interAdm', 'interadm_route', interadm, methods=['GET', 'POST'])
 app.add_url_rule('/addPositionintermediate', 'add_position_intermediate', add_position_intermediate, methods=['GET', 'POST'])
 app.add_url_rule('/delete_position_intermediate/<int:position_id>', 'delete_position_intermediate', delete_position_intermediate, methods=['POST'])
 app.add_url_rule('/editPositionintermediate/<int:position_id>', 'edit_position_intermediate', edit_position_intermediate, methods=['GET', 'POST'])
+app.add_url_rule('/viewPositionInter/<int:position_id>', 'view_inter', view_inter, methods=['GET', 'POST'])
 
 # rotas avançado
 app.add_url_rule('/avancAdm', 'avancadm_route', avancadm, methods=['GET', 'POST'])
 app.add_url_rule('/addPositionadvanced', 'add_position_advanced', add_position_advanced, methods=['GET', 'POST'])
 app.add_url_rule('/delete_position_advanced/<int:position_id>', 'delete_position_advanced', delete_position_advanced, methods=['POST'])
 app.add_url_rule('/editPositionadvanced/<int:position_id>', 'edit_position_advanced', edit_position_advanced, methods=['GET', 'POST'])
+app.add_url_rule('/viewPositionAvanc/<int:position_id>', 'view_avanc', view_avanc, methods=['GET', 'POST'])
 
-
-# app.add_url_rule('/add', 'form_book_route', form_book, methods=['GET', 'POST'])
-# app.add_url_rule('/edit/<int:book_id>', 'form_book_route', form_book, methods=['GET', 'POST'])
-# app.add_url_rule('/delete/<int:book_id>', 'delete_book_route', delete_book)
-
-# app.add_url_rule('/positions/<level>', 'list_positions_by_level_route', list_positions_by_level)
-# app.add_url_rule('/position/<int:position_id>', 'show_position_details_route', show_position_details)
-# app.add_url_rule('/positions/add', 'add_position_route', form_position, methods=['GET', 'POST'])
-# app.add_url_rule('/positions/<int:position_id>/edit', 'edit_position_route', form_position, methods=['GET', 'POST'])
 
 if __name__ == '__main__':
     app.run(debug=True)

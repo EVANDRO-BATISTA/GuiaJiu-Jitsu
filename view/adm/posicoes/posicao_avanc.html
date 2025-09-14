@@ -1,0 +1,102 @@
+{% extends 'templates/base.html' %}
+
+{% block conteudo %}   
+
+    <header>
+        <div>
+            <a href="{{ url_for('guiabjj_route') }}" class="back-button" style="display: block;">← Voltar para o Guia</a>
+        </div>
+        <!-- <button class="back-button" onclick="location.href='index.html'" style="display: block;">← Voltar para o Guia</button> -->
+        <h1>Administração de Posições</h1>
+        <p>Gerencie as posições, variações e passos</p>
+    </header>
+
+    <div class="controls admin-controls">
+        <a href="{{ url_for('admin_route') }}" class="level-btn">Iniciante</a> 
+        <a href="{{ url_for('interadm_route') }}" class="level-btn">Intermediário</a> 
+        <a href="{{ url_for('avancadm_route') }}" class="level-btn active">Avançado</a> 
+        <a href="{{ url_for('add_position_advanced') }}" class="add-position-btn">Adicionar Nova Posição</a>
+        <!-- <button class="level-btn active" data-level="beginner">Iniciante</button>
+        <button class="level-btn" data-level="intermediate">Intermediário</button>
+        <button class="level-btn" data-level="advanced">Avançado</button>
+        <button class="add-position-btn">Adicionar Nova Posição</button> -->
+    </div>
+
+    <!-- <div id="admin-content-container">
+            <div class="admin-form-container">
+                <h2>Adicionar Nova Posição (Beginner)</h2>
+                <form id="position-form">
+                    <div class="admin-form-group">
+                        <label for="position-name">Nome da Posição:</label>
+                        <input type="text" id="position-name" name="positionName" value="" required="">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="position-description">Descrição da Posição:</label>
+                        <textarea id="position-description" name="positionDescription" placeholder="Descrição da posição" required=""></textarea>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="position-image">Imagem Principal (URL/Nome do Arquivo):</label>
+                        <input type="text" id="position-image" name="positionImage" value="" placeholder="beginner_guard.png" required="">
+                    </div>
+
+                    <h3>Variações</h3>
+                    <div id="variations-container-form">                        
+                    </div>                    
+                    <button type="button" class="add-variation-btn">Adicionar Variação</button>
+
+                    <div class="form-actions">
+                        <button type="submit" class="save-btn">Salvar Posição</button>
+                        <button type="button" class="cancel-btn">Cancelar</button>
+                    </div>
+                </form> -->
+
+        <div id="admin-content-container">
+            <div class="admin-form-container">
+                <div class="admin-form-group">
+
+                    <form id="position-form" action="{{ url_for('add_position_advanced') }}" method="post">
+            
+                        <h2>Adicionar Nova Posição (Avançado)</h2>
+                        <label for="position_name">Nome da Posição:</label>
+                        <input type="text" id="position_name" name="position_name" required><br><br>
+                        
+                        <label for="position_description">Descrição da Posição:</label><br>
+                        <textarea id="position_description" name="position_description" rows="4" cols="50" required></textarea><br><br>
+                        
+                        <label for="position_image">URL da Imagem da Posição:</label>
+                        <input type="text" id="position_image" name="position_image"><br><br>
+                        
+                        <input type="hidden" name="position_level" value="beginner">
+
+                        <div id="variations_container">
+                            <h3>Variação 1</h3>
+                            <label for="variation_name_1">Nome da Variação:</label>
+                            <input type="text" id="variation_name_1" name="variation_name[]" required><br><br>
+                            
+                            <label for="variation_desc_1">Descrição da Variação:</label><br>
+                            <textarea id="variation_desc_1" name="variation_desc[]" rows="4" cols="50" required></textarea><br><br>
+
+                            <div class="steps_container" id="steps_container_1">
+                                <h4>Passo 1</h4>
+                                <label for="step_img_1_1">URL da Imagem do Passo:</label>
+                                <input type="text" id="step_img_1_1" name="step_img_1[]"><br><br>
+                                
+                                <label for="step_desc_1_1">Descrição do Passo:</label><br>
+                                <textarea id="step_desc_1_1" name="step_desc_1[]" rows="4" cols="50" required></textarea><br><br>
+                            </div>
+                            
+                            <button class="add-variation-btn" type="button" onclick="addStep(1)">Adicionar Outro Passo</button>
+                            
+                        </div>
+
+                        <button class="add-variation-btn" type="button" onclick="addVariation()">Adicionar Outra Variação</button><br><br>
+
+                        <input class="save-btn" type="submit" value="Salvar Posição">
+                        <a class="cancel-btn" href="{{ url_for('avancadm_route') }}" >Cancelar</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+{% endblock %}

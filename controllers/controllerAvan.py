@@ -67,7 +67,7 @@ def add_position_advanced():
             print(f"Erro ao salvar a posição: {e}")
             return f"Erro ao salvar a posição: {e}. Por favor, tente novamente."
 
-    return render_template('adm/posicoes/posicao_avan.html')
+    return render_template('adm/posicoes/posicao_avanc.html')
 
 # DELETE
 def delete_position_advanced(position_id):
@@ -81,7 +81,7 @@ def delete_position_advanced(position_id):
         flash(f'Posição "{position.name}" excluída com sucesso!', 'success')
         
         # Redireciona para a página de listagem
-        return redirect(url_for('admin_route')) 
+        return redirect(url_for('avancadm_route')) 
 
     except Exception as e:
         db.session.rollback()
@@ -89,7 +89,7 @@ def delete_position_advanced(position_id):
         # Armazena uma mensagem de erro na sessão
         flash('Erro ao excluir a posição. Por favor, tente novamente.', 'danger')
         
-        return redirect(url_for('admin_route'))
+        return redirect(url_for('avancadm_route'))
 
 # Atualizar
 def edit_position_advanced(position_id):
@@ -161,4 +161,4 @@ def edit_position_advanced(position_id):
             return redirect(url_for('edit_position_advanced', position_id=position_id))
 
     # Método GET: Renderiza o formulário pré-preenchido
-    return render_template('adm/posicoes/posicao_avan_update.html', position=position)
+    return render_template('adm/posicoes/posicao_avanc_update.html', position=position)

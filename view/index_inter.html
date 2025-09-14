@@ -23,13 +23,15 @@
 
             {% for position in positions %}
 
-            <div class="position-card" data-name="Guarda Fechada">
-                <div class="card-image" style="background-image: url('beginner_guard.png')"></div>
-                <div class="card-content">
-                    <h3>{{ position.name }}</h3>
-                    <p>{{ position.description }}</p>
+            <a href="{{ url_for('view_inter', position_id=position.id) }}" class="card-link" style="text-decoration: none;">
+                <div class="position-card" data-name="{{ position.name }}">
+                        <img class="card-image" src="{{ url_for('static', filename='imagens/'+ position.image) }}">
+                    <div class="card-content">
+                        <h3>{{ position.name }}</h3>
+                        <p>{{ position.description }}</p>
+                    </div>
                 </div>
-            </div>
+            </a>
 
             {% endfor %}
 

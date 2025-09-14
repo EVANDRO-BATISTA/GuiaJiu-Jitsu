@@ -1,9 +1,28 @@
 {% extends 'templates/base.html' %}
-
-{% block conteudo %}
+<!-- Janela de adicionado com sucesso -->
+    {% block conteudo %}
+        <div id="popup-container" class="popup-container">
+            <div class="popup-content">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="message-container">
+                    {% for category, message in messages %}
+                        {% if category == 'success' %}
+                        <div class="alert-success" role="alert">
+                            <p>{{ message }}</p>
+                            <span class="close-btn" onclick="this.parentElement.style.display='none';">&times;</span>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                {% endwith %}
+            </div>
+        </div>    
+<!--  -->
     <header>
         <div>
-            <a href="{{ url_for('guiabjj_route') }}" class="back-button" style="display: block;">← Voltar para o Guia</a>
+            <a href="{{ url_for('guiabjj_route') }}" class="back-button" style="display: block; text-decoration: none;">← Voltar para o Guia</a>
         </div>
         <!-- <button class="back-button" onclick="location.href='index.html'" style="display: block;">← Voltar para o Guia</button> -->
         <h1>Administração de Posições</h1>
@@ -14,7 +33,7 @@
         <a href="{{ url_for('admin_route') }}" class="level-btn">Iniciante</a> 
         <a href="{{ url_for('interadm_route') }}" class="level-btn">Intermediário</a> 
         <a href="{{ url_for('avancadm_route') }}" class="level-btn active">Avançado</a> 
-        <a href="{{ url_for('guiabjj_route') }}" class="add-position-btn">Adicionar Nova Posição</a> 
+        <a href="{{ url_for('add_position_advanced') }}" class="add-position-btn">Adicionar Nova Posição</a> 
         <!-- <button class="level-btn active" data-level="beginner">Iniciante</button>
         <button class="level-btn" data-level="intermediate">Intermediário</button>
         <button class="level-btn" data-level="advanced">Avançado</button>
@@ -29,9 +48,12 @@
 
             <div class="admin-position-item">
                 <span>{{ position.name }}</span>
+                <span id="meuSpanOculto" hidden>{{ position.id }}</span>
                 <div class="admin-position-actions">
-                    <button class="action-btn edit-btn" data-name="Guarda Fechada">Editar</button>
-                    <button class="action-btn delete-btn" data-name="Guarda Fechada">Excluir</button>
+                    <a class="action-btn edit-btn" href="{{ url_for('edit_position_advanced', position_id=position.id) }}" >Editar</a>
+                     <form action="{{ url_for('delete_position_advanced', position_id=position.id) }}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta posição?');" >
+                        <button class="action-btn delete-btn" type="submit" >Excluir</button>
+                    </form>
                 </div>
             </div>
             
