@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <h2 class="mb-4 text-center">Formulário de Cadastro BJJ</h2>
+        <form method="POST" action="{{ url_for('register_route') }}">
+            
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome Completo <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="nome" name="nome" required>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="cpf" class="form-label">CPF <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="cpf" name="cpf" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="email" class="form-label">E-mail <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="contato" class="form-label">Número de Contato</label>
+                    <input type="text" class="form-control" id="contato" name="contato">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="academia_vinculada" class="form-label">Academia Vinculada</label>
+                    <input type="text" class="form-control" id="academia_vinculada" name="academia_vinculada">
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="faixa_graduacao" class="form-label">Faixa de Graduação</label>
+                    <select class="form-select" id="faixa_graduacao" name="faixa_graduacao">
+                        <option value="">Nenhuma</option>
+                        <option value="Branca">Branca</option>
+                        <option value="Azul">Azul</option>
+                        <option value="Roxa">Roxa</option>
+                        <option value="Marrom">Marrom</option>
+                        <option value="Preta">Preta</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="idade" class="form-label">Idade</label>
+                    <input type="number" class="form-control" id="idade" name="idade" min="5">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="peso" class="form-label">Peso (kg)</label>
+                    <input type="number" class="form-control" id="peso" name="peso" step="0.1">
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="genero" class="form-label">Gênero</label>
+                    <select class="form-select" id="genero" name="genero">
+                        <option value="">Prefiro não informar</option>
+                        <option value="Masculino">Masculino</option>
+                        <option value="Feminino">Feminino</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="nivel_acesso" class="form-label">Nível de Acesso <span class="text-danger">*</span></label>
+                    <select class="form-select" id="nivel_acesso" name="nivel_acesso" required>
+                        <option value="aluno">Aluno</option>
+                        <option value="professor">Professor</option>
+                        <option value="administrador">Administrador</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="senha" class="form-label">Senha <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" id="senha" name="senha" required>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="confirmacao_senha" class="form-label">Confirmação de Senha <span class="text-danger">*</span></label>
+                    <input type="password" class="form-control" id="confirmacao_senha" name="confirmacao_senha" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 mt-3">Finalizar Cadastro</button>
+
+            <div class="text-center mt-3">
+                <small>Já tem conta? <a href="{{ url_for('login_route') }}">Faça Login</a></small>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

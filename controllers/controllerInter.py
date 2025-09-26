@@ -134,7 +134,7 @@ def edit_position_intermediate(position_id):
         try:
             position.name = request.form['position_name']
             position.description = request.form['position_description']
-            position.image = request.form.get('position_image')
+            # position.image = request.form.get('position_image')
 
             # --- Lógica de upload de imagem ---
             if 'imagem_upload' in request.files:

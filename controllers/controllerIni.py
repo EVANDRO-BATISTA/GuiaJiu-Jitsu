@@ -135,8 +135,7 @@ def edit_position_beginner(position_id):
         try:
             position.name = request.form['position_name']
             position.description = request.form['position_description']
-            position.image = request.form.get('position_image')
-
+            
             # --- Lógica de upload de imagem ---
             if 'imagem_upload' in request.files:
                 file = request.files['imagem_upload']
@@ -151,25 +150,18 @@ def edit_position_beginner(position_id):
                     file.save(upload_path)
                     
                     # Atualizar o caminho da imagem no banco de dados
-                    position.image = os.path.join(filename)
-
+                    position.image = os.path.join(filename) # ✅ Ajuste aqui para incluir o diretório 'imagens'
+            
             # --- Lógica de atualização de Variações e Passos ---
-
-            # 1. Coletar os IDs das variações e passos que NÃO devem ser deletados
-            # Isso requer que você adicione um campo oculto no HTML para os IDs existentes.
-            # Por simplicidade, vou manter a abordagem de deletar e recriar,
-            # que é mais fácil de gerenciar com o formulário dinâmico.
-
-            # Deletar todas as variações e passos existentes para esta posição
-            # antes de adicionar as novas do formulário.
-            # É importante fazer isso em uma ordem que respeite as chaves estrangeiras.
+            
+            # Deletar todas as variações e passos existentes
             for variation in position.variations:
                 for step in variation.steps:
                     db.session.delete(step)
                 db.session.delete(variation)
-            db.session.flush() # Para garantir que as exclusões sejam processadas antes de adicionar novas
+            db.session.flush()
 
-            # 2. Adicionar as novas variações e passos com base nos dados do formulário
+            # Adicionar as novas variações e passos
             variation_names = request.form.getlist('variation_name[]')
             variation_descs = request.form.getlist('variation_desc[]')
             
